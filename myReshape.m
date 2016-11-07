@@ -16,10 +16,10 @@ b = blocksize;
 
 
 output = zeros(p*b*b, (m/b)*(n/b));
-for col = 1: (m/b)*(n/b)
+for col = 1: (n/b)*(m/b)
     for row = 1:p:p*(b^2)-2
-        preRow = floor((col-1) /(m/b)) * b;
-        preCol = mod(col-1, (m/b))  * b;
+        preRow = floor((col-1) /(n/b)) * b;
+        preCol = mod(col-1, (n/b))  * b;
         index =  ceil(row/3);
         subRow = ceil(index/b);
         subCol = mod(index-1, b) + 1;
