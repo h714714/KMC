@@ -1,0 +1,221 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>vecQuantize</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-07-10"><meta name="DC.source" content="vecQuantize_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>vecQuantize</h1><!--introduction--><p>Vector quantization using LBG method of center splitting</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">References</a></li><li><a href="#4">Example</a></li><li><a href="#6">See Also</a></li></ul></div><h2>Syntax<a name="1"></a></h2><div><ul><li>center=vecQuantize(data, codeBookSize)</li><li>center=vecQuantize(data, codeBookSize, showPlot)</li><li>[center, U]=vecQuantize(data, codeBookSize, ...)</li><li>[center, U, centerHistory]=vecQuantize(data, codeBookSize, ...)</li></ul></div><h2>Description<a name="2"></a></h2><p>
+<p>center=vecQuantize(data, codeBookSize) returns the centers (codebook) of k-means via LBG method, where
+	<ul>
+	<li>data: data matrix where each column is an observation
+	<li>codeBookSize: codebook size or number of cluster centers (should be the power of 2)
+	<li>center: codebook matrix where each column is a codeword
+	</ul>
+<p>center=vecQuantize(data, codeBookSize, 1) display the animation and messages during training.
+<p>[center, U]=vecQuantize(data, codeBookSize, ...) returns extra info of the partition matrix U.
+</ul>
+</ul>
+<li>       [center, U, centerHistory]=vecQuantize(data, codeBookSize, ...) returns extra info of all the centers after each iteration.
+</p><h2>References<a name="3"></a></h2><div><ol><li>Y. Linde, A. Buzo, and R.M. Gray, "An Algorithm for Vector Quantizer Design", IEEE Transactions on Communications, vol. 28, pp. 84-94, 1980.</li></ol></div><h2>Example<a name="4"></a></h2><pre class="codeinput">DS=dcData(2);
+data=DS.input;
+codeBookSize=2^5;
+showPlot=1;
+codebook=vecQuantize(data, codeBookSize, showPlot);
+</pre><pre class="codeoutput">Iteration count = 1/200, distortion = 671.431405
+Iteration count = 2/200, distortion = 413.987683
+Iteration count = 3/200, distortion = 413.979949
+Iteration count = 4/200, distortion = 413.929451
+Iteration count = 5/200, distortion = 413.857126
+Iteration count = 6/200, distortion = 413.777440
+Iteration count = 7/200, distortion = 413.708860
+Iteration count = 8/200, distortion = 413.672540
+Iteration count = 9/200, distortion = 413.586843
+Iteration count = 10/200, distortion = 413.460327
+Iteration count = 11/200, distortion = 413.392654
+Iteration count = 12/200, distortion = 413.345761
+Iteration count = 13/200, distortion = 413.336058
+Iteration count = 14/200, distortion = 413.336058
+No. of centers = 2, loop count = 14, distortion = 413.336
+Iteration count = 1/200, distortion = 413.336058
+Iteration count = 2/200, distortion = 317.011950
+Iteration count = 3/200, distortion = 153.855631
+Iteration count = 4/200, distortion = 150.899142
+Iteration count = 5/200, distortion = 150.706260
+Iteration count = 6/200, distortion = 150.697310
+Iteration count = 7/200, distortion = 150.694254
+Iteration count = 8/200, distortion = 150.694254
+No. of centers = 4, loop count = 8, distortion = 150.694
+Iteration count = 1/200, distortion = 150.694254
+Iteration count = 2/200, distortion = 77.166319
+Iteration count = 3/200, distortion = 69.173620
+Iteration count = 4/200, distortion = 66.776090
+Iteration count = 5/200, distortion = 66.115422
+Iteration count = 6/200, distortion = 65.913196
+Iteration count = 7/200, distortion = 65.872842
+Iteration count = 8/200, distortion = 65.857539
+Iteration count = 9/200, distortion = 65.841022
+Iteration count = 10/200, distortion = 65.839623
+Iteration count = 11/200, distortion = 65.839623
+No. of centers = 8, loop count = 11, distortion = 65.8396
+Iteration count = 1/200, distortion = 65.839623
+Iteration count = 2/200, distortion = 40.391472
+Iteration count = 3/200, distortion = 38.518372
+Iteration count = 4/200, distortion = 37.538486
+Iteration count = 5/200, distortion = 37.053483
+Iteration count = 6/200, distortion = 36.699328
+Iteration count = 7/200, distortion = 36.450300
+Iteration count = 8/200, distortion = 36.227920
+Iteration count = 9/200, distortion = 36.091258
+Iteration count = 10/200, distortion = 35.918482
+Iteration count = 11/200, distortion = 35.751004
+Iteration count = 12/200, distortion = 35.601493
+Iteration count = 13/200, distortion = 35.462865
+Iteration count = 14/200, distortion = 35.365573
+Iteration count = 15/200, distortion = 35.228141
+Iteration count = 16/200, distortion = 35.166579
+Iteration count = 17/200, distortion = 35.114194
+Iteration count = 18/200, distortion = 35.069926
+Iteration count = 19/200, distortion = 35.043296
+Iteration count = 20/200, distortion = 35.037513
+Iteration count = 21/200, distortion = 35.034941
+Iteration count = 22/200, distortion = 35.027501
+Iteration count = 23/200, distortion = 35.019814
+Iteration count = 24/200, distortion = 35.008156
+Iteration count = 25/200, distortion = 35.004081
+Iteration count = 26/200, distortion = 34.999930
+Iteration count = 27/200, distortion = 34.998701
+Iteration count = 28/200, distortion = 34.997271
+Iteration count = 29/200, distortion = 34.997271
+No. of centers = 16, loop count = 29, distortion = 34.9973
+Iteration count = 1/200, distortion = 34.997271
+Iteration count = 2/200, distortion = 20.538666
+Iteration count = 3/200, distortion = 18.211051
+Iteration count = 4/200, distortion = 17.247921
+Iteration count = 5/200, distortion = 16.718941
+Iteration count = 6/200, distortion = 16.364631
+Iteration count = 7/200, distortion = 16.073371
+Iteration count = 8/200, distortion = 15.842095
+Iteration count = 9/200, distortion = 15.667754
+Iteration count = 10/200, distortion = 15.575135
+Iteration count = 11/200, distortion = 15.492154
+Iteration count = 12/200, distortion = 15.464709
+Iteration count = 13/200, distortion = 15.433901
+Iteration count = 14/200, distortion = 15.389128
+Iteration count = 15/200, distortion = 15.370335
+Iteration count = 16/200, distortion = 15.349424
+Iteration count = 17/200, distortion = 15.336405
+Iteration count = 18/200, distortion = 15.319417
+Iteration count = 19/200, distortion = 15.317789
+Iteration count = 20/200, distortion = 15.317789
+No. of centers = 32, loop count = 20, distortion = 15.3178
+</pre><img vspace="5" hspace="5" src="vecQuantize_help_01.png" alt=""> <h2>See Also<a name="6"></a></h2><p><a href="kMeansClustering_help.html">kMeansClustering</a>, <a href="vqDataPlot_help.html">vqDataPlot</a>.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% vecQuantize
+% Vector quantization using LBG method of center splitting
+%% Syntax
+% * 		center=vecQuantize(data, codeBookSize)
+% * 		center=vecQuantize(data, codeBookSize, showPlot)
+% * 		[center, U]=vecQuantize(data, codeBookSize, ...)
+% *        [center, U, centerHistory]=vecQuantize(data, codeBookSize, ...)
+%% Description
+%
+% <html>
+% <p>center=vecQuantize(data, codeBookSize) returns the centers (codebook) of k-means via LBG method, where
+% 	<ul>
+% 	<li>data: data matrix where each column is an observation
+% 	<li>codeBookSize: codebook size or number of cluster centers (should be the power of 2)
+% 	<li>center: codebook matrix where each column is a codeword
+% 	</ul>
+% <p>center=vecQuantize(data, codeBookSize, 1) display the animation and messages during training.
+% <p>[center, U]=vecQuantize(data, codeBookSize, ...) returns extra info of the partition matrix U.
+% </ul>
+% </ul>
+% <li>       [center, U, centerHistory]=vecQuantize(data, codeBookSize, ...) returns extra info of all the centers after each iteration.
+% </html>
+%% References
+% # 		Y. Linde, A. Buzo, and R.M. Gray, "An Algorithm for Vector Quantizer Design", IEEE Transactions on Communications, vol. 28, pp. 84-94, 1980.
+%% Example
+%%
+%
+DS=dcData(2);
+data=DS.input;
+codeBookSize=2^5;
+showPlot=1;
+codebook=vecQuantize(data, codeBookSize, showPlot);
+%% See Also
+% <kMeansClustering_help.html kMeansClustering>,
+% <vqDataPlot_help.html vqDataPlot>.
+
+##### SOURCE END #####
+--><hr><a href="index.html">Top page</a>&nbsp;&nbsp;&nbsp;Next: <a href="toolboxInfo_help.html">toolboxInfo.m</a>&nbsp;&nbsp;&nbsp;Prev:<a href="vqCenterInit_help.html">vqCenterInit.m</a>
+<script>
+function keyFunction(){
+if (event.keyCode==37) document.location="toolboxInfo_help.html";
+if (event.keyCode==39) document.location="vqCenterInit_help.html";
+if (event.keyCode==69) document.location="matlab: edit vecQuantize.m";
+}
+document.onkeydown=keyFunction;
+</script>
+</body></html>
